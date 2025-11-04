@@ -1,4 +1,3 @@
-import asyncio
 import psutil
 import platform
 import time
@@ -7,6 +6,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
+
+psutil.cpu_percent(interval=None)
 
 # --- Pydantic Models ---
 class SystemInfo(BaseModel):
@@ -67,7 +68,7 @@ def get_static_info_sync():
         ),
         hardware_info=HardwareInfo(
             cpu_model=get_cpu_model(),
-            cpu_cores=psutil.cpu_count(),
+            cpu_cores=psutil.cpu_count() or 0,
             total_memory_gb=round(mem.total / (1024**3), 1),
             total_disk_gb=round(disk.total / (1024**3), 1)
         )
@@ -97,9 +98,9 @@ def get_live_status_sync():
 
 # --- API Endpoints ---
 @app.get("/api/v1/system/info", response_model=StaticInfoResponse)
-async def get_static_info():
-    return await asyncio.to_thread(get_static_info_sync)
+def get_static_info():
+    return get_static_info_sync()
 
 @app.get("/api/v1/system/live", response_model=LiveStatusResponse)
-async def get_live_status():
-    return await asyncio.to_thread(get_live_status_sync)
+def get_live_status():
+    return get_live_status_sync()
