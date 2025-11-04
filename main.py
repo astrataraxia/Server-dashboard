@@ -90,8 +90,8 @@ def get_static_info_sync():
 
     return StaticInfoResponse(
         system_info=SystemInfo(
-            os=f"{platform.system()} {platform.release()}",
-            hostname=platform.node()
+            os=platform.system(),
+            hostname="Server"
         ),
         hardware_info=HardwareInfo(
             cpu_model=get_cpu_model(),
