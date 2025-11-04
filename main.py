@@ -123,7 +123,7 @@ def get_live_status_sync():
 
     return LiveStatusResponse(
         uptime=get_uptime(),
-        cpu_percent=psutil.cpu_percent(interval=0.1),
+        cpu_percent=psutil.cpu_percent(interval=None),
         memory_percent=mem.percent,
         disk_partitions=disk_partitions_list,
         load_average=LoadAverage(
